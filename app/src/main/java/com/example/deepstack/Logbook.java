@@ -80,11 +80,9 @@ public class Logbook {
         this.createdAt = createdAt;
     }
 
-    // Constructor kosong untuk Gson/Retrofit
     public Logbook() {
     }
 
-    // Constructor untuk insert/POST data baru
     public Logbook(String spotName, String latitude, String longitude, int gearId, String notes) {
         this.spotName = spotName;
         this.latitude = latitude;
