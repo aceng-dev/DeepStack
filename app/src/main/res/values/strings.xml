@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">DeepStack</string>
+    
+    <!-- Activity Titles -->
+    <string name="logbook_title">Logbook</string>
+    
+    <!-- Button Labels -->
+    <string name="add_new_log">Add New Log</string>
+    
+    <!-- Messages -->
+    <string name="add_new_log_clicked">Add New Log clicked</string>
+    
+    <!-- List Item Labels -->
+    <string name="spot_label">Spot: %s</string>
+    <string name="location_label">Lat: %s | Lon: %s</string>
+    <string name="gear_label">Gear ID: %d</string>
+    <string name="notes_label">Notes: %s</string>
+    <string name="created_label">Created: %s</string>
+    <string name="notes_empty">-</string>
+    
+    <!-- Error Messages -->
+    <string name="error_loading_logbooks">Failed to load logbooks</string>
+    <string name="error_generic">An error occurred. Please try again.</string>
 </resources>
