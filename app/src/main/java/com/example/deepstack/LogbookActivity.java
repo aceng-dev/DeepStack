@@ -42,6 +42,18 @@ public class LogbookActivity extends AppCompatActivity {
 
         logbookViewModel = new ViewModelProvider(this).get(LogbookViewModel.class);
 
+        // Tambahkan listener untuk hapus (Long Click)
+        logbookAdapter.setOnItemLongClickListener(logbook -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Hapus Logbook")
+                    .setMessage("Apakah Anda yakin ingin menghapus log di " + logbook.getSpotName() + "?")
+                    .setPositiveButton("Hapus", (dialog, which) -> {
+                        logbookViewModel.deleteLog(logbook.getId());
+                    })
+                    .setNegativeButton("Batal", null)
+                    .show();
+        });
+
         logbookViewModel.getLoadingLiveData().observe(this, isLoading -> {
             if (isLoading != null) {
                 progressBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
@@ -57,6 +69,14 @@ public class LogbookActivity extends AppCompatActivity {
         logbookViewModel.getLogbookListLiveData().observe(this, logbooks -> {
             if (logbooks != null) {
                 logbookAdapter.setLogbookList(logbooks);
+            }
+        });
+
+        // Observer untuk hasil hapus
+        logbookViewModel.getDeleteResultLiveData().observe(this, isSuccess -> {
+            if (isSuccess != null && isSuccess) {
+                Toast.makeText(this, "Logbook berhasil dihapus", Toast.LENGTH_SHORT).show();
+                logbookViewModel.fetchLogbooks(); // Refresh daftar
             }
         });
 

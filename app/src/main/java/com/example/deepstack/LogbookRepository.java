@@ -1,9 +1,5 @@
-package com.example.deepstack;
-
-import androidx.lifecycle.MutableLiveData;
-
+package com.example.deepstack;import androidx.lifecycle.MutableLiveData;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -15,11 +11,9 @@ public class LogbookRepository {
         apiService = ApiClient.getClient().create(ApiService.class);
     }
 
-    public MutableLiveData<List<Logbook>> getLogbooks(MutableLiveData<String> errorLiveData, MutableLiveData<Boolean> loadingLiveData) {
-        MutableLiveData<List<Logbook>> logbookData = new MutableLiveData<>();
-        
+    // Mengambil daftar Logbook
+    public void fetchLogbooks(MutableLiveData<List<Logbook>> logbookData, MutableLiveData<String> errorLiveData, MutableLiveData<Boolean> loadingLiveData) {
         loadingLiveData.setValue(true);
-        
         apiService.getLogbooks().enqueue(new Callback<List<Logbook>>() {
             @Override
             public void onResponse(Call<List<Logbook>> call, Response<List<Logbook>> response) {
@@ -27,24 +21,21 @@ public class LogbookRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     logbookData.setValue(response.body());
                 } else {
-                    errorLiveData.setValue("Failed: " + response.code() + " " + response.message());
+                    errorLiveData.setValue("Gagal memuat logbook: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Logbook>> call, Throwable t) {
                 loadingLiveData.setValue(false);
-                errorLiveData.setValue("Error: " + t.getMessage());
+                errorLiveData.setValue("Kesalahan jaringan: " + t.getMessage());
             }
         });
-
-        return logbookData;
     }
 
-    public MutableLiveData<List<Gear>> getGears(MutableLiveData<String> errorLiveData, MutableLiveData<Boolean> loadingLiveData) {
-        MutableLiveData<List<Gear>> gearData = new MutableLiveData<>();
+    // Mengambil daftar Gear (untuk Spinner)
+    public void fetchGears(MutableLiveData<List<Gear>> gearData, MutableLiveData<String> errorLiveData, MutableLiveData<Boolean> loadingLiveData) {
         loadingLiveData.setValue(true);
-
         apiService.getGears().enqueue(new Callback<List<Gear>>() {
             @Override
             public void onResponse(Call<List<Gear>> call, Response<List<Gear>> response) {
@@ -52,39 +43,65 @@ public class LogbookRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     gearData.setValue(response.body());
                 } else {
-                    errorLiveData.setValue("Failed Gears: " + response.code());
+                    errorLiveData.setValue("Gagal memuat gear: " + response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<List<Gear>> call, Throwable t) {
                 loadingLiveData.setValue(false);
-                errorLiveData.setValue("Error Gears: " + t.getMessage());
+                errorLiveData.setValue("Kesalahan jaringan gear: " + t.getMessage());
             }
         });
-        return gearData;
     }
 
+    // Menambah Logbook Baru
     public void addLog(Logbook logbook, MutableLiveData<Boolean> postResultLiveData, MutableLiveData<String> errorLiveData, MutableLiveData<Boolean> loadingLiveData) {
         loadingLiveData.setValue(true);
-
-        apiService.insertLogbook(logbook).enqueue(new Callback<Logbook>() {
+        // Header Prefer return=representation digunakan agar Supabase mengembalikan data yang diinsert (mencegah GSON error)
+        apiService.insertLogbook(logbook, "return=representation").enqueue(new Callback<List<Logbook>>() {
             @Override
-            public void onResponse(Call<Logbook> call, Response<Logbook> response) {
+            public void onResponse(Call<List<Logbook>> call, Response<List<Logbook>> response) {
                 loadingLiveData.setValue(false);
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful()) {
                     postResultLiveData.setValue(true);
                 } else {
                     postResultLiveData.setValue(false);
-                    errorLiveData.setValue("Gagal: " + response.code() + " " + response.message());
+                    errorLiveData.setValue("Gagal simpan (Error " + response.code() + ")");
                 }
             }
 
             @Override
-            public void onFailure(Call<Logbook> call, Throwable t) {
+            public void onFailure(Call<List<Logbook>> call, Throwable t) {
                 loadingLiveData.setValue(false);
                 postResultLiveData.setValue(false);
-                errorLiveData.setValue("Error: " + t.getMessage());
+                errorLiveData.setValue("Kesalahan koneksi: " + t.getMessage());
+            }
+        });
+    }
+
+    // Menghapus Logbook berdasarkan ID
+    public void deleteLog(Long id, MutableLiveData<Boolean> deleteResultLiveData, MutableLiveData<String> errorLiveData, MutableLiveData<Boolean> loadingLiveData) {
+        loadingLiveData.setValue(true);
+        // PostgREST Supabase menggunakan filter eq.ID
+        String idFilter = "eq." + id;
+        apiService.deleteLogbook(idFilter).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                loadingLiveData.setValue(false);
+                if (response.isSuccessful()) {
+                    deleteResultLiveData.setValue(true);
+                } else {
+                    deleteResultLiveData.setValue(false);
+                    errorLiveData.setValue("Gagal menghapus: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                loadingLiveData.setValue(false);
+                deleteResultLiveData.setValue(false);
+                errorLiveData.setValue("Kesalahan koneksi: " + t.getMessage());
             }
         });
     }

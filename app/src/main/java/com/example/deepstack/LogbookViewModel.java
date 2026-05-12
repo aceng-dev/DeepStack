@@ -3,62 +3,56 @@ package com.example.deepstack;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import java.util.List;
 
 public class LogbookViewModel extends ViewModel {
     private final LogbookRepository logbookRepository;
-    private MutableLiveData<List<Logbook>> logbookListLiveData;
-    private MutableLiveData<List<Gear>> gearListLiveData;
-    private final MutableLiveData<Boolean> postResultLiveData;
-    private final MutableLiveData<String> errorLiveData;
-    private final MutableLiveData<Boolean> loadingLiveData;
+
+    private final MutableLiveData<List<Logbook>> logbookListLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Gear>> gearListLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> postResultLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> deleteResultLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> loadingLiveData = new MutableLiveData<>();
 
     public LogbookViewModel() {
         logbookRepository = new LogbookRepository();
-        postResultLiveData = new MutableLiveData<>();
-        errorLiveData = new MutableLiveData<>();
-        loadingLiveData = new MutableLiveData<>();
     }
 
     public void fetchLogbooks() {
-        logbookListLiveData = logbookRepository.getLogbooks(errorLiveData, loadingLiveData);
+        logbookRepository.fetchLogbooks(logbookListLiveData, errorLiveData, loadingLiveData);
     }
 
     public void fetchGears() {
-        gearListLiveData = logbookRepository.getGears(errorLiveData, loadingLiveData);
+        logbookRepository.fetchGears(gearListLiveData, errorLiveData, loadingLiveData);
     }
 
     public LiveData<List<Logbook>> getLogbookListLiveData() {
-        if (logbookListLiveData == null) {
-            logbookListLiveData = new MutableLiveData<>();
-            fetchLogbooks();
-        }
+        if (logbookListLiveData.getValue() == null) fetchLogbooks();
         return logbookListLiveData;
     }
 
     public LiveData<List<Gear>> getGearListLiveData() {
-        if (gearListLiveData == null) {
-            gearListLiveData = new MutableLiveData<>();
-            fetchGears();
-        }
+        if (gearListLiveData.getValue() == null) fetchGears();
         return gearListLiveData;
     }
 
-    public void addNewLog(String spotName, String latitude, String longitude, int gearId, String notes) {
+    // Bagian method addNewLog saja yang berubah tipe datanya
+    public void addNewLog(String spotName, Double latitude, Double longitude, Long gearId, String notes) {
         Logbook newLog = new Logbook(spotName, latitude, longitude, gearId, notes);
         logbookRepository.addLog(newLog, postResultLiveData, errorLiveData, loadingLiveData);
     }
 
-    public LiveData<Boolean> getPostResultLiveData() {
-        return postResultLiveData;
+    public void deleteLog(Long id) {
+        logbookRepository.deleteLog(id, deleteResultLiveData, errorLiveData, loadingLiveData);
     }
 
-    public LiveData<String> getErrorLiveData() {
-        return errorLiveData;
-    }
+    public LiveData<Boolean> getPostResultLiveData() { return postResultLiveData; }
+    public LiveData<Boolean> getDeleteResultLiveData() { return deleteResultLiveData; }
+    public LiveData<String> getErrorLiveData() { return errorLiveData; }
+    public LiveData<Boolean> getLoadingLiveData() { return loadingLiveData; }
 
-    public LiveData<Boolean> getLoadingLiveData() {
-        return loadingLiveData;
+    public void resetPostResult() {
+        postResultLiveData.setValue(null);
     }
 }

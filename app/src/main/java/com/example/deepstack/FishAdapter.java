@@ -9,12 +9,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class FishAdapter extends RecyclerView.Adapter<FishAdapter.FishViewHolder> {
 
     private List<Fish> fishList = new ArrayList<>();
+    private final WikiImageRepository wikiImageRepository = new WikiImageRepository();
 
     public void setFishList(List<Fish> fishList) {
         this.fishList = fishList;
@@ -24,7 +27,8 @@ public class FishAdapter extends RecyclerView.Adapter<FishAdapter.FishViewHolder
     @NonNull
     @Override
     public FishViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_fish, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_fish, parent, false);
         return new FishViewHolder(view);
     }
 
@@ -34,8 +38,30 @@ public class FishAdapter extends RecyclerView.Adapter<FishAdapter.FishViewHolder
         holder.tvSpeciesName.setText(fish.getSpeciesName());
         holder.tvScientificName.setText(fish.getScientificName());
 
-        // TODO: Ganti R.mipmap.ic_launcher dengan nama file gambar pixel art ikan Anda nanti
-        holder.imgFish.setImageResource(R.mipmap.ic_launcher);
+        // Jika gambar sudah di-cache di objek Fish, langsung load
+        if (fish.getImageUrl() != null) {
+            Glide.with(holder.itemView.getContext())
+                    .load(fish.getImageUrl())
+                    .placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher)
+                    .into(holder.imgFish);
+        } else {
+            // Belum ada gambar, fetch dari Wikipedia
+            holder.imgFish.setImageResource(R.mipmap.ic_launcher); // placeholder dulu
+            wikiImageRepository.fetchImageForFish(fish.getSpeciesName(), imageUrl -> {
+                fish.setImageUrl(imageUrl != null ? imageUrl : ""); // cache di objek
+                // Update UI di main thread
+                holder.imgFish.post(() -> {
+                    if (imageUrl != null) {
+                        Glide.with(holder.itemView.getContext())
+                                .load(imageUrl)
+                                .placeholder(R.mipmap.ic_launcher)
+                                .error(R.mipmap.ic_launcher)
+                                .into(holder.imgFish);
+                    }
+                });
+            });
+        }
     }
 
     @Override
@@ -45,13 +71,13 @@ public class FishAdapter extends RecyclerView.Adapter<FishAdapter.FishViewHolder
 
     static class FishViewHolder extends RecyclerView.ViewHolder {
         TextView tvSpeciesName, tvScientificName;
-        ImageView imgFish; // Tambahan untuk gambar
+        ImageView imgFish;
 
         public FishViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSpeciesName = itemView.findViewById(R.id.tvSpeciesName);
             tvScientificName = itemView.findViewById(R.id.tvScientificName);
-            imgFish = itemView.findViewById(R.id.imgFish); // Inisialisasi ID gambar
+            imgFish = itemView.findViewById(R.id.imgFish);
         }
     }
 }

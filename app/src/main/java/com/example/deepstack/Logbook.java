@@ -4,19 +4,19 @@ import com.google.gson.annotations.SerializedName;
 
 public class Logbook {
     @SerializedName("id")
-    private int id;
+    private Long id; // Gunakan Long (objek) agar bisa null
 
     @SerializedName("spot_name")
     private String spotName;
 
     @SerializedName("latitude")
-    private String latitude;
+    private Double latitude; // Sesuaikan dengan float8 (Double)
 
     @SerializedName("longitude")
-    private String longitude;
+    private Double longitude; // Sesuaikan dengan float8 (Double)
 
     @SerializedName("gear_id")
-    private int gearId;
+    private Long gearId; // Sesuaikan dengan bigint (Long)
 
     @SerializedName("notes")
     private String notes;
@@ -24,70 +24,29 @@ public class Logbook {
     @SerializedName("created_at")
     private String createdAt;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getSpotName() {
-        return spotName;
-    }
-
-    public void setSpotName(String spotName) {
+    // Konstruktor untuk membuat log baru (ID dan CreatedAt dibiarkan NULL)
+    public Logbook(String spotName, Double latitude, Double longitude, Long gearId, String notes) {
+        this.id = null;
         this.spotName = spotName;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
         this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
         this.longitude = longitude;
-    }
-
-    public int getGearId() {
-        return gearId;
-    }
-
-    public void setGearId(int gearId) {
         this.gearId = gearId;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
         this.notes = notes;
+        this.createdAt = null;
     }
 
+    // GSON secara default akan mengabaikan field yang bernilai NULL.
+    // Ini penting agar Supabase yang menghandle ID dan created_at secara otomatis.
+
+    public Long getId() { return id; }
+    public String getSpotName() { return spotName; }
+    public Double getLatitude() { return latitude; }
+    public Double getLongitude() { return longitude; }
+    public Long getGearId() { return gearId; }
+    public String getNotes() { return notes; }
+
+    // Tambahkan ini di Logbook.java
     public String getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Logbook() {
-    }
-
-    public Logbook(String spotName, String latitude, String longitude, int gearId, String notes) {
-        this.spotName = spotName;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.gearId = gearId;
-        this.notes = notes;
     }
 }
