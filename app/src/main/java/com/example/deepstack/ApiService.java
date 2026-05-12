@@ -26,4 +26,8 @@ public interface ApiService {
             @Header("Authorization") String bearerToken,
             @Body Logbook logbook
     );
+
+    // Assuming we're fetching from FishWatch API or mock API
+    @GET("species")
+    Call<List<Fish>> getFishes();
 }
