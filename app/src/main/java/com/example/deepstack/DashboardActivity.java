@@ -1,5 +1,6 @@
 package com.example.deepstack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -37,13 +38,13 @@ public class DashboardActivity extends AppCompatActivity {
         cardGearSpotLog = findViewById(R.id.cardGearSpotLog);
 
         cardFishSpecies.setOnClickListener(v -> {
-            // TODO: Nanti diarahkan ke Activity/Fragment Fish Species yang sebenarnya
-            Toast.makeText(DashboardActivity.this, "Membuka halaman Fish Species...", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(DashboardActivity.this, FishActivity.class);
+            startActivity(intent);
         });
 
         cardGearSpotLog.setOnClickListener(v -> {
-            // TODO: Nanti diarahkan ke Activity/Fragment Gear & Spot Log yang sebenarnya
-            Toast.makeText(DashboardActivity.this, "Membuka halaman Gear & Spot Log...", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(DashboardActivity.this, LogbookActivity.class);
+            startActivity(intent);
         });
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 public class LogbookViewModel extends ViewModel {
     private final LogbookRepository logbookRepository;
     private MutableLiveData<List<Logbook>> logbookListLiveData;
+    private MutableLiveData<List<Gear>> gearListLiveData;
     private final MutableLiveData<Boolean> postResultLiveData;
     private final MutableLiveData<String> errorLiveData;
     private final MutableLiveData<Boolean> loadingLiveData;
@@ -20,38 +21,39 @@ public class LogbookViewModel extends ViewModel {
         loadingLiveData = new MutableLiveData<>();
     }
 
-    // --- FITUR GET: Mengambil daftar logbook ---
-    public void fetchLogbooks(String apikey, String bearerToken) {
-        logbookListLiveData = logbookRepository.getLogbooks(apikey, bearerToken, errorLiveData, loadingLiveData);
+    public void fetchLogbooks() {
+        logbookListLiveData = logbookRepository.getLogbooks(errorLiveData, loadingLiveData);
     }
 
-    public LiveData<List<Logbook>> getLogbookListLiveData(String apikey, String bearerToken) {
+    public void fetchGears() {
+        gearListLiveData = logbookRepository.getGears(errorLiveData, loadingLiveData);
+    }
+
+    public LiveData<List<Logbook>> getLogbookListLiveData() {
         if (logbookListLiveData == null) {
             logbookListLiveData = new MutableLiveData<>();
-            fetchLogbooks(apikey, bearerToken);
+            fetchLogbooks();
         }
         return logbookListLiveData;
     }
 
-    public LiveData<List<Logbook>> getLogbookListLiveData() {
-        return logbookListLiveData;
+    public LiveData<List<Gear>> getGearListLiveData() {
+        if (gearListLiveData == null) {
+            gearListLiveData = new MutableLiveData<>();
+            fetchGears();
+        }
+        return gearListLiveData;
     }
 
-    // --- FITUR POST: Menambahkan log baru (Add New Log) ---
-    public void addNewLog(String apikey, String bearerToken, String spotName, String latitude, String longitude, int gearId, String notes) {
-        // Membungkus parameter menjadi objek Logbook
+    public void addNewLog(String spotName, String latitude, String longitude, int gearId, String notes) {
         Logbook newLog = new Logbook(spotName, latitude, longitude, gearId, notes);
-        
-        // Memanggil fungsi addLog di repository
-        logbookRepository.addLog(apikey, bearerToken, newLog, postResultLiveData, errorLiveData, loadingLiveData);
+        logbookRepository.addLog(newLog, postResultLiveData, errorLiveData, loadingLiveData);
     }
 
-    // Mengamati hasil POST (true jika berhasil, false jika gagal)
     public LiveData<Boolean> getPostResultLiveData() {
         return postResultLiveData;
     }
 
-    // --- Status Umum (Loading & Error) ---
     public LiveData<String> getErrorLiveData() {
         return errorLiveData;
     }

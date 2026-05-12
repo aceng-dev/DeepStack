@@ -27,7 +27,7 @@ public class FishRepository {
                 if (response.isSuccessful() && response.body() != null) {
                     fishData.setValue(response.body());
                 } else {
-                    errorLiveData.setValue("Failed to fetch data: " + response.message());
+                    errorLiveData.setValue("Failed: " + response.code() + " " + response.message());
                 }
             }
 
