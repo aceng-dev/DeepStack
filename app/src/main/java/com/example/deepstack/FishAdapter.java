@@ -3,6 +3,7 @@ package com.example.deepstack;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,9 @@ public class FishAdapter extends RecyclerView.Adapter<FishAdapter.FishViewHolder
         Fish fish = fishList.get(position);
         holder.tvSpeciesName.setText(fish.getSpeciesName());
         holder.tvScientificName.setText(fish.getScientificName());
+
+        // TODO: Ganti R.mipmap.ic_launcher dengan nama file gambar pixel art ikan Anda nanti
+        holder.imgFish.setImageResource(R.mipmap.ic_launcher);
     }
 
     @Override
@@ -41,11 +45,13 @@ public class FishAdapter extends RecyclerView.Adapter<FishAdapter.FishViewHolder
 
     static class FishViewHolder extends RecyclerView.ViewHolder {
         TextView tvSpeciesName, tvScientificName;
+        ImageView imgFish; // Tambahan untuk gambar
 
         public FishViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSpeciesName = itemView.findViewById(R.id.tvSpeciesName);
             tvScientificName = itemView.findViewById(R.id.tvScientificName);
+            imgFish = itemView.findViewById(R.id.imgFish); // Inisialisasi ID gambar
         }
     }
 }

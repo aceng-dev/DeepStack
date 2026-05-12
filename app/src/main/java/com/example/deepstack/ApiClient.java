@@ -10,8 +10,7 @@ public class ApiClient {
     private static Retrofit retrofit = null;
     private static final String BASE_URL = "https://yiuonpbvnhvhcbfyyswn.supabase.co/rest/v1/";
 
-    // Pastikan ini adalah 'anon' key dari dashboard Supabase Anda
-    public static String supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlpdW9ucGJ2bmh2aHZjYmZ5eXN3biIsInJvbGUiOiJhb2wiLCJpYXQiOjE3NDk4NDgyNjAsImV4cCI6MjA2NTQyNDI2MH0.3W4z9-V87p2g9sXJt72T-j0tH0u88X66Rk-f9Rk_J74";
+    public static String supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlpdW9ucGJ2bmh2aGNiZnl5c3duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0MTQxODMsImV4cCI6MjA5Mzk5MDE4M30.g_d5OyTZWCn1sNFLtCRRdbV4z5K_AvvTQUJ0ZI_b08k";
 
     public static Retrofit getClient() {
         if (retrofit == null) {

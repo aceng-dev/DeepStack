@@ -6,30 +6,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="#F5F5F5"
+    android:background="@color/background_light"
     android:gravity="center"
     tools:context=".DashboardActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Main Dashboard"
-        android:textSize="28sp"
+        android:text="DeepStack"
+        android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="#333333"
+        android:textColor="@color/ocean_primary_dark"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ocean Logbook &amp; Directory"
+        android:textSize="14sp"
+        android:textColor="@color/text_muted"
         android:gravity="center"
         android:layout_marginBottom="40dp"/>
 
-    <!-- Card 1: Fish Species -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardFishSpecies"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:layout_marginBottom="24dp"
         android:clickable="true"
         android:focusable="true"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/ocean_primary"
         app:strokeWidth="0dp">
 
         <LinearLayout
@@ -37,36 +45,43 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:background="#2196F3">
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🐟"
+                android:textSize="32sp"
+                android:layout_marginBottom="8dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fish Species"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
-                
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kelola data spesies ikan"
-                android:textColor="#E0E0E0"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
+                android:text="Katalog Data Spesies Ikan"
+                android:textColor="@color/ocean_accent"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Card 2: Gear & Spot Log -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardGearSpotLog"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:clickable="true"
         android:focusable="true"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="@color/ocean_primary_dark"
         app:strokeWidth="0dp">
 
         <LinearLayout
@@ -74,23 +89,30 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:background="#4CAF50">
+            android:padding="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gear &amp; Spot Log"
+                android:text="⚓"
+                android:textSize="32sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logbook"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Catat perjalanan dan alat"
-                android:textColor="#E0E0E0"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"/>
+                android:text="Catat Perjalanan &amp; Alat"
+                android:textColor="@color/ocean_accent"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
