@@ -59,8 +59,7 @@ public class LogbookAdapter extends RecyclerView.Adapter<LogbookAdapter.LogbookV
             holder.tvDate.setText(date != null ? date : "");
         }
 
-        // Default image
-        holder.imgSpot.setImageResource(R.mipmap.ic_launcher);
+        holder.imgSpot.setImageResource(R.drawable.ic_list_spot);
 
         holder.itemView.setOnLongClickListener(v -> {
             if (longClickListener != null) {

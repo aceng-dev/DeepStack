@@ -19,13 +19,12 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().setAllowEnterTransitionOverlap(true);
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dashboard);
-        getWindow().requestFeature(android.view.Window.FEATURE_CONTENT_TRANSITIONS);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
 
         // Hide ActionBar if exists
         if (getSupportActionBar() != null) {
