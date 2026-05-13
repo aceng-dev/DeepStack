@@ -34,6 +34,7 @@ public class LogbookAdapter extends RecyclerView.Adapter<LogbookAdapter.LogbookV
         holder.tvSpotName.setText(logbook.getSpotName());
         holder.tvCoordinates.setText("Lat: " + logbook.getLatitude() + ", Lon: " + logbook.getLongitude());
         holder.tvNotes.setText(logbook.getNotes());
+        holder.tvDate.setText(logbook.getCreatedAt());
 
         // Format tanggal jika diperlukan
         if (logbook.getCreatedAt() != null && logbook.getCreatedAt().length() >= 10) {
@@ -43,7 +44,7 @@ public class LogbookAdapter extends RecyclerView.Adapter<LogbookAdapter.LogbookV
         }
 
         // TODO: Ganti R.mipmap.ic_launcher dengan nama file gambar jangkar/spot pixel art Anda nanti
-        holder.imgSpot.setImageResource(R.mipmap.ic_launcher);
+        holder.imgSpot.setImageResource(R.drawable.ic_list_spot);
     }
 
     @Override

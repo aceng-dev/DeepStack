@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.app.ActivityOptions;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
-        
+
         // Hide ActionBar if exists
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -33,8 +34,18 @@ public class SplashActivity extends AppCompatActivity {
         // Tunggu 2 detik lalu pindah ke Dashboard
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             Intent intent = new Intent(SplashActivity.this, DashboardActivity.class);
-            startActivity(intent);
-            finish(); // Tutup SplashActivity agar tidak bisa di-back
-        }, 2000); // 2000 ms = 2 detik
+
+            // Konfigurasi Shared Element Transition
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                    SplashActivity.this,
+                    findViewById(R.id.ivLogo),
+                    "logo_morph"
+            );
+
+            startActivity(intent, options.toBundle());
+
+            new Handler(Looper.getMainLooper()).postDelayed(this::finish, 1000);
+
+        }, 2000); // 2000 ms = 2 detik delay di splash screen
     }
 }

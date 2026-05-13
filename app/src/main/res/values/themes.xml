@@ -4,6 +4,7 @@
         <item name="colorPrimaryVariant">@color/ocean_primary_dark</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/ocean_accent</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
     <style name="Theme.DeepStack" parent="Base.Theme.DeepStack" />
 </resources>
