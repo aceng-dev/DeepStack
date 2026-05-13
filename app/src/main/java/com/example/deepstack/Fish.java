@@ -3,36 +3,27 @@ package com.example.deepstack;
 import com.google.gson.annotations.SerializedName;
 
 public class Fish {
-    @SerializedName("id")
-    private int id;
 
-    @SerializedName("Species Name")
-    private String speciesName;
+    @SerializedName("name")
+    private String name;
 
-    @SerializedName("Scientific Name")
-    private String scientificName;
+    @SerializedName("taxonomy")
+    private Taxonomy taxonomy;
 
-    public int getId() {
-        return id;
-    }
+    // Field tambahan, bukan dari API — diisi manual setelah fetch gambar
+    private String imageUrl;
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getSpeciesName() {
-        return speciesName;
-    }
-
-    public void setSpeciesName(String speciesName) {
-        this.speciesName = speciesName;
-    }
+    public String getSpeciesName() { return name; }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public String getScientificName() {
-        return scientificName;
+        return taxonomy != null ? taxonomy.getScientificName() : "-";
     }
 
-    public void setScientificName(String scientificName) {
-        this.scientificName = scientificName;
+    public static class Taxonomy {
+        @SerializedName("scientific_name")
+        private String scientificName;
+        public String getScientificName() { return scientificName; }
     }
 }

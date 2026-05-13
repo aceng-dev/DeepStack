@@ -3,38 +3,27 @@ package com.example.deepstack;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import java.util.List;
 
 public class FishViewModel extends ViewModel {
     private final FishRepository fishRepository;
-    private MutableLiveData<List<Fish>> fishListLiveData;
-    private final MutableLiveData<String> errorLiveData;
-    private final MutableLiveData<Boolean> loadingLiveData;
+    private final MutableLiveData<List<Fish>> fishListLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> loadingLiveData = new MutableLiveData<>();
 
     public FishViewModel() {
         fishRepository = new FishRepository();
-        errorLiveData = new MutableLiveData<>();
-        loadingLiveData = new MutableLiveData<>();
     }
 
     public void fetchFishes() {
-        fishListLiveData = fishRepository.getFishes(errorLiveData, loadingLiveData);
+        fishRepository.fetchFishes(fishListLiveData, errorLiveData, loadingLiveData);
     }
 
     public LiveData<List<Fish>> getFishListLiveData() {
-        if (fishListLiveData == null) {
-            fishListLiveData = new MutableLiveData<>();
-            fetchFishes();
-        }
+        if (fishListLiveData.getValue() == null) fetchFishes();
         return fishListLiveData;
     }
 
-    public LiveData<String> getErrorLiveData() {
-        return errorLiveData;
-    }
-
-    public LiveData<Boolean> getLoadingLiveData() {
-        return loadingLiveData;
-    }
+    public LiveData<String> getErrorLiveData() { return errorLiveData; }
+    public LiveData<Boolean> getLoadingLiveData() { return loadingLiveData; }
 }

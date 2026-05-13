@@ -34,7 +34,8 @@ public class FishAdapter extends RecyclerView.Adapter<FishAdapter.FishViewHolder
         holder.tvSpeciesName.setText(fish.getSpeciesName());
         holder.tvScientificName.setText(fish.getScientificName());
 
-        holder.imgFish.setImageResource(R.drawable.ic_list_fish);
+        // TODO: Ganti R.mipmap.ic_launcher dengan nama file gambar pixel art ikan Anda nanti
+        holder.imgFish.setImageResource(R.mipmap.ic_launcher);
     }
 
     @Override

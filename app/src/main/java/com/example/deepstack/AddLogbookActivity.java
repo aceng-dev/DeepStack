@@ -1,7 +1,6 @@
 package com.example.deepstack;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,9 +43,9 @@ public class AddLogbookActivity extends AppCompatActivity {
 
         logbookViewModel = new ViewModelProvider(this).get(LogbookViewModel.class);
 
-        // Fetch Gears for Spinner
+        // Fetch Gears untuk Spinner
         logbookViewModel.getGearListLiveData().observe(this, gears -> {
-            if (gears != null) {
+            if (gears != null && !gears.isEmpty()) {
                 this.gearsList = gears;
                 List<String> gearNames = new ArrayList<>();
                 for (Gear gear : gears) {
@@ -58,14 +57,16 @@ public class AddLogbookActivity extends AppCompatActivity {
             }
         });
 
+        // Hasil posting data
         logbookViewModel.getPostResultLiveData().observe(this, isSuccess -> {
             if (isSuccess != null && isSuccess) {
-                Toast.makeText(this, "Log successfully added!", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK);
+                Toast.makeText(this, "Logbook berhasil disimpan!", Toast.LENGTH_SHORT).show();
+                logbookViewModel.resetPostResult();
                 finish();
             }
         });
 
+        // Error message
         logbookViewModel.getErrorLiveData().observe(this, error -> {
             if (error != null) {
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
@@ -77,21 +78,41 @@ public class AddLogbookActivity extends AppCompatActivity {
 
     private void saveLog() {
         String spotName = etSpotName.getText().toString().trim();
-        String lat = etLatitude.getText().toString().trim();
-        String lon = etLongitude.getText().toString().trim();
+        String latStr = etLatitude.getText().toString().trim();
+        String lonStr = etLongitude.getText().toString().trim();
         String notes = etNotes.getText().toString().trim();
 
-        if (spotName.isEmpty() || lat.isEmpty() || lon.isEmpty()) {
-            Toast.makeText(this, "Please fill in all required fields", Toast.LENGTH_SHORT).show();
+        // Validasi input wajib
+        if (spotName.isEmpty() || latStr.isEmpty() || lonStr.isEmpty()) {
+            Toast.makeText(this, "Harap isi semua kolom wajib!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int gearId = 0;
-        if (!gearsList.isEmpty()) {
-            gearId = gearsList.get(spinnerGear.getSelectedItemPosition()).getId();
+        // Cek data gear
+        if (gearsList.isEmpty()) {
+            Toast.makeText(this, "Data gear belum tersedia, silakan tunggu...", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        logbookViewModel.addNewLog(spotName, lat, lon, gearId, notes);
+        try {
+            // KONVERSI DATA SESUAI SKEMA SUPABASE
+            Double latitude = Double.parseDouble(latStr);
+            Double longitude = Double.parseDouble(lonStr);
+
+            int selectedPos = spinnerGear.getSelectedItemPosition();
+            if (selectedPos < 0) {
+                Toast.makeText(this, "Pilih gear terlebih dahulu!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Long gearId = (long) gearsList.get(selectedPos).getId();
+
+            // Kirim ke ViewModel
+            logbookViewModel.addNewLog(spotName, latitude, longitude, gearId, notes);
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Latitude & Longitude harus berupa angka desimal!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
